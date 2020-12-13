@@ -294,11 +294,12 @@ export function getMentionsPlugin(opts) {
         }
 
         // if any of the below keys, override with custom handlers.
-        var down, up, enter, esc;
-        enter = e.keyCode === 13;
-        down = e.keyCode === 40;
-        up = e.keyCode === 38;
-        esc = e.keyCode === 27;
+        var down, up, enter, esc, space;
+        enter = e.code === "Enter";
+        down = e.code === "ArrowDown";
+        up = e.code === "ArrowUp";
+        esc = e.code === "Escape";
+        space = e.code === "Space" && !opts.allowSpace;
 
         if (down) {
           goNext(view, state, opts);
@@ -309,6 +310,9 @@ export function getMentionsPlugin(opts) {
         } else if (enter) {
           select(view, state, opts);
           return true;
+        } else if (space) {
+          select(view, state, opts);
+          return false;
         } else if (esc) {
           clearTimeout(showListTimeoutId);
           hideList();
